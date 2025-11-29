@@ -1,8 +1,7 @@
-version: '3.8'
-
 services:
 
   leader:
+    image: replication-app:latest
     build: .
     container_name: leader
     environment:
@@ -20,7 +19,7 @@ services:
       - repnet
 
   follower1:
-    build: .
+    image: replication-app:latest
     container_name: follower1
     environment:
       SPRING_PROFILES_ACTIVE: follower
@@ -30,7 +29,7 @@ services:
       - repnet
 
   follower2:
-    build: .
+    image: replication-app:latest
     container_name: follower2
     environment:
       SPRING_PROFILES_ACTIVE: follower
@@ -40,7 +39,7 @@ services:
       - repnet
 
   follower3:
-    build: .
+    image: replication-app:latest
     container_name: follower3
     environment:
       SPRING_PROFILES_ACTIVE: follower
@@ -50,7 +49,7 @@ services:
       - repnet
 
   follower4:
-    build: .
+    image: replication-app:latest
     container_name: follower4
     environment:
       SPRING_PROFILES_ACTIVE: follower
@@ -60,7 +59,7 @@ services:
       - repnet
 
   follower5:
-    build: .
+    image: replication-app:latest
     container_name: follower5
     environment:
       SPRING_PROFILES_ACTIVE: follower

@@ -20,8 +20,11 @@ public class StorageService {
     private final Map<String, Pair<String, Instant>> concurrentMap= new ConcurrentHashMap<>();
     private final SenderService senderService;
 
-    @Value("${replication.quorum:2}")
+    @Value("${replication.quorum:0}")
     private int quorum;
+
+    @Value("${replication.version:false}")
+    private boolean withVersion;
 
     public void write(String key, String value){
         Instant now = Instant.now();
@@ -33,17 +36,17 @@ public class StorageService {
     }
 
     public String get(String key){
-        return concurrentMap.get(key).getFirst();
+        return concurrentMap.getOrDefault(key, new Pair<>("", Instant.now())).getFirst();
     }
 
     public void replicate(String key, String value, Instant time){
         concurrentMap.compute(key, (k, v) -> {
-            if (v == null){
-                return new Pair<>(value, time);
-            }
-            if (time.isAfter(v.getSecond())){
-                return new Pair<>(value, time);
-            }
+            if (!withVersion) return new Pair<>(value, time);
+
+            if (v == null) return new Pair<>(value, time);
+
+            if (time.isAfter(v.getSecond())) return new Pair<>(value, time);
+
             return v;
         });
     }
