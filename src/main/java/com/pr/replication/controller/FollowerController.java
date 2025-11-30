@@ -16,12 +16,7 @@ public class FollowerController {
 
     @PostMapping("/replicate")
     @ResponseStatus(HttpStatus.CREATED)
-    public void replicate(@RequestBody ReplicationRequest replication){
+    public void replicate(@RequestBody ReplicationRequest replication) {
         storageService.replicate(replication.key(), replication.value(), replication.time());
-    }
-
-    @GetMapping("/{key}")
-    public String getKey(@PathVariable String key){
-        return storageService.get(key);
     }
 }

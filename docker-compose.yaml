@@ -7,12 +7,9 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: leader
       REPLICATION_QUORUM: 3
-      REPLICATION_FOLLOWERS: >
-        http://follower1:8080,
-        http://follower2:8080,
-        http://follower3:8080,
-        http://follower4:8080,
-        http://follower5:8080
+      REPLICATION_VERSION: false
+      DELAY_SIMULATION: true
+      REPLICATION_FOLLOWERS: "http://follower1:8080,http://follower2:8080,http://follower3:8080,http://follower4:8080,http://follower5:8080"
     ports:
       - "8080:8080"
     networks:
@@ -23,6 +20,7 @@ services:
     container_name: follower1
     environment:
       SPRING_PROFILES_ACTIVE: follower
+      REPLICATION_VERSION: false
     ports:
       - "8081:8080"
     networks:
@@ -33,6 +31,7 @@ services:
     container_name: follower2
     environment:
       SPRING_PROFILES_ACTIVE: follower
+      REPLICATION_VERSION: false
     ports:
       - "8082:8080"
     networks:
@@ -43,6 +42,7 @@ services:
     container_name: follower3
     environment:
       SPRING_PROFILES_ACTIVE: follower
+      REPLICATION_VERSION: false
     ports:
       - "8083:8080"
     networks:
@@ -53,6 +53,7 @@ services:
     container_name: follower4
     environment:
       SPRING_PROFILES_ACTIVE: follower
+      REPLICATION_VERSION: false
     ports:
       - "8084:8080"
     networks:
@@ -63,6 +64,7 @@ services:
     container_name: follower5
     environment:
       SPRING_PROFILES_ACTIVE: follower
+      REPLICATION_VERSION: false
     ports:
       - "8085:8080"
     networks:

@@ -58,7 +58,7 @@ class ReplicationIntegrationTest {
                 .collect(Collectors.joining(","));
 
         registry.add("replication.followers", () -> followerUrls);
-        registry.add("replication.quorum", () -> "3");
+        registry.add("replication.quorum", () -> "5");
         registry.add("replication.version", () -> "false");
         registry.add("delay.simulation", () -> "true");
 
