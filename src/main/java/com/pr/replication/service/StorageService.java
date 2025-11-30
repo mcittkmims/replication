@@ -65,26 +65,25 @@ public class StorageService {
         AtomicInteger ok = new AtomicInteger(0);
         AtomicBoolean failed = new AtomicBoolean(false);
 
-        CompletableFuture<Void> completion = new CompletableFuture<>();
+        CompletableFuture<Void> done = new CompletableFuture<>();
 
-        futures.forEach(f -> f.whenComplete((result, ex) -> {
+        for (CompletableFuture<Boolean> f : futures) {
+            f.thenAccept(result -> {
+                if (done.isDone()) return;
 
-            if (completion.isDone())
-                return;
+                if (!result) {
+                    failed.set(true);
+                    done.complete(null);
+                    return;
+                }
 
-            if (ex != null || !result) {
-                failed.set(true);
-                completion.complete(null);
-                return;
-            }
+                if (ok.incrementAndGet() >= quorum) {
+                    done.complete(null);
+                }
+            });
+        }
 
-            if (ok.incrementAndGet() >= quorum) {
-                completion.complete(null);
-            }
-
-        }));
-
-        completion.join();
+        done.join();
         return !failed.get() && ok.get() >= quorum;
     }
 
