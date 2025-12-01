@@ -14,8 +14,8 @@ public class AsyncConfig {
     @Bean(name = "taskExecutor")
     public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(50);
-        executor.setMaxPoolSize(100);
+        executor.setCorePoolSize(100);
+        executor.setMaxPoolSize(150);
         executor.setQueueCapacity(500);
         executor.setThreadNamePrefix("AsyncReplication-");
         executor.initialize();
