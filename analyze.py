@@ -29,8 +29,6 @@ class LatencyStats:
     """Statistics for a set of latency measurements."""
     mean: float
     median: float
-    p95: float
-    p99: float
     min_val: float
     max_val: float
 
@@ -100,16 +98,11 @@ def run_concurrent_writes(
 def calculate_stats(latencies: List[float]) -> LatencyStats:
     """Calculate latency statistics."""
     if not latencies:
-        return LatencyStats(0, 0, 0, 0, 0, 0)
-
-    sorted_lats = sorted(latencies)
-    n = len(sorted_lats)
+        return LatencyStats(0, 0, 0, 0)
 
     return LatencyStats(
         mean=statistics.mean(latencies),
         median=statistics.median(latencies),
-        p95=sorted_lats[int(n * 0.95)] if n > 1 else sorted_lats[0],
-        p99=sorted_lats[int(n * 0.99)] if n > 1 else sorted_lats[0],
         min_val=min(latencies),
         max_val=max(latencies)
     )
@@ -249,8 +242,6 @@ def run_analysis():
             print(f"  Successful writes: {len(latencies)}")
             print(f"  Mean latency:   {stats.mean*1000:.1f} ms")
             print(f"  Median latency: {stats.median*1000:.1f} ms")
-            print(f"  P95 latency:    {stats.p95*1000:.1f} ms")
-            print(f"  P99 latency:    {stats.p99*1000:.1f} ms")
         else:
             print("  No successful writes!")
 
@@ -308,15 +299,11 @@ def plot_results(stats: Dict[int, LatencyStats], results_dir: str = "results"):
     quorums = list(stats.keys())
     means = [stats[q].mean for q in quorums]
     medians = [stats[q].median for q in quorums]
-    p95s = [stats[q].p95 for q in quorums]
-    p99s = [stats[q].p99 for q in quorums]
 
     plt.figure(figsize=(10, 6))
 
     plt.plot(quorums, means, color='#779ECB', marker='o', label='mean', linewidth=2)
     plt.plot(quorums, medians, color='#FFB347', marker='s', label='median', linewidth=2)
-    plt.plot(quorums, p95s, color='#77DD77', marker='^', label='p95', linewidth=2)
-    plt.plot(quorums, p99s, color='#FF6961', marker='d', label='p99', linewidth=2)
 
     plt.xlabel('Quorum value')
     plt.ylabel('Latency (s)')
